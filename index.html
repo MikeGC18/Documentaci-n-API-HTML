@@ -19,7 +19,7 @@
                 <li><a href="#basedatos">Base de dades</a></li>
                 <li><a href="#appsettings">appsettings.json</a></li>
                 <li><a href="#programcs">Program.cs</a></li>
-                <li><a href="#autenticacion">Autenticació</a></li>
+                <li><a href="#autenticacio">Autenticació</a></li>
                 <li><a href="#checklist">Llista de verificació</a></li>
                 <li><a href="#errores">Errors detectats</a></li>
                 <li><a href="#Allotjament">Desplegament</a></li>
@@ -43,7 +43,7 @@
             <h2>2. Estructura del proyecte</h2>
             <p>El projecte compta amb una organització modular:</p>
             <ul>
-                <li><strong>Controllers:</strong> define las rutas y endpoints de la API.</li>
+                <li><strong>Controllers:</strong> defineix les rutes i endpoints de la API.</li>
                 <li><strong>Models:</strong> conté las classes que representen les entitats de la base de dades.</li>
                 <li><strong>Data:</strong> conté el context de la base de datos (Fm1Context).</li>
                 <li><strong>FM1.db:</strong> archiu SQLite amb les dades de Fórmula 1.</li>
@@ -179,21 +179,21 @@
 
         </section>
 
-        <section id="autenticacion">
-            <h2>7. Autenticación</h2>
-            <p>Para realizar operaciones sensibles (POST, PUT, DELETE) es necesario enviar una <strong>API_KEY</strong>.
-                En este caso, la clave utilizada fue “TU_API_KEY”. Los métodos GET permanecen públicos.</p>
-            <img src="imagen4.png" alt="Ejemplo de autenticación API Key">
-            <img src="Imagen1.png" alt="Ejemplo de autenticación API Key">
-            <img src="imagen2.png" alt="Ejemplo de autenticación API Key">
-            <img src="imagen3.png" alt="Ejemplo de autenticación API Key">
+        <section id="autenticacio">
+            <h2>7. Autenticació</h2>
+            <p>Per realitzar operacions sensibles (POST, PUT, DELETE) és necessari enviar una <strong>API_KEY</strong>.
+                En aquest cas, la clau utilitzada va ser “LA_TEVA_API_KEY”. Els mètodes GET continuen sent públics.</p>
+            <img src="imagen4.png" alt="Exemple d'autenticació amb API Key">
+            <img src="Imagen1.png" alt="Exemple d'autenticació amb API Key">
+            <img src="imagen2.png" alt="Exemple d'autenticació amb API Key">
+            <img src="imagen3.png" alt="Exemple d'autenticació amb API Key">
         </section>
 
         <section id="checklist">
-            <h2>8. Checklist de requisitos</h2>
+            <h2>8. Llista de verificació de requisits</h2>
             <table border="1" cellpadding="5">
                 <tr>
-                    <th>Recurso</th>
+                    <th>Recurs</th>
                     <th>GET</th>
                     <th>POST</th>
                     <th>PUT</th>
@@ -201,31 +201,33 @@
                 </tr>
                 <tr>
                     <td>CIRCUITS</td>
-                    <td>Implementado*1</td>
-                    <td>Implementado</td>
-                    <td>Implementado*2</td>
-                    <td>Implementado</td>
+                    <td>Implementat*1</td>
+                    <td>Implementat</td>
+                    <td>Implementat*2</td>
+                    <td>Implementat</td>
                 </tr>
                 <tr>
                     <td>CONSTRUCTORS</td>
-                    <td>Implementado*3</td>
-                    <td>Implementado</td>
-                    <td>Implementado</td>
-                    <td>Implementado</td>
+                    <td>Implementat*3</td>
+                    <td>Implementat</td>
+                    <td>Implementat</td>
+                    <td>Implementat</td>
                 </tr>
                 <tr>
                     <td>DRIVERS</td>
-                    <td>Implementado</td>
-                    <td>Implementado</td>
-                    <td>Implementado</td>
-                    <td>Implementado</td>
+                    <td>Implementat</td>
+                    <td>Implementat</td>
+                    <td>Implementat</td>
+                    <td>Implementat</td>
                 </tr>
             </table>
-            <p>*1 Error en la dirección de la base de datos.<br>*2 Error al igualar la id requerida con
-                circuits.Circuits.id.<br>*3 Error en el nombrado de la ruta Constructors.</p>
-            <img src="imagen5.png" alt="Checklist de implementación">
-            <img src="imagen6.png" alt="Checklist de implementación">
+            <p>*1 Error en l’adreça de la base de dades.<br>
+                *2 Error en igualar l’id requerida amb circuits.Circuits.id.<br>
+                *3 Error en el nom de la ruta Constructors.</p>
+            <img src="imagen5.png" alt="Llista de verificació de la implementació">
+            <img src="imagen6.png" alt="Llista de verificació de la implementació">
         </section>
+
 
         <section id="errores">
             <h2>9. Errors detectats</h2>
