@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación API F1</title>
+    <link rel="stylesheet" href="/index.css"   > 
+</head>
+
+<body>
+    <header>
+        <h1>Proyecto API F1</h1>
+        <nav>
+            <ul>
+                <li><a href="#introduccion">Introducció</a></li>
+                <li><a href="#estructura">Estructura del projecte</a></li>
+                <li><a href="#models">Models</a></li>
+                <li><a href="#basedatos">Base de dades</a></li>
+                <li><a href="#appsettings">appsettings.json</a></li>
+                <li><a href="#programcs">Program.cs</a></li>
+                <li><a href="#autenticacion">Autenticació</a></li>
+                <li><a href="#checklist">Llista de verificació</a></li>
+                <li><a href="#errores">Errors detectats</a></li>
+                <li><a href="#Allotjament">Desplegament</a></li>
+                <li><a href="#Testeo">Proves</a></li>
+                <li><a href="#Conclusió">Conclusió</a></li>
+            </ul>
+
+        </nav>
+    </header>
+
+    <main>
+        <section id="introduccion">
+            <h2>1. Introducció</h2>
+            <p>Aquest document resumeix el desenvolupament de l'API de Fórmula 1, creada a C# amb l'objectiu de gestionar
+            informació sobre circuits, pilots i constructors. Es detalla l'estructura, la configuració,
+            autenticació i problemes detectats durant la implementació i desplegament.</p>
+            <img src="/FOTOINTRO.png" alt="fOTOINTROSWAGGER">
+        </section>
+
+        <section id="estructura">
+            <h2>2. Estructura del proyecte</h2>
+            <p>El projecte compta amb una organització modular:</p>
+            <ul>
+                <li><strong>Controllers:</strong> define las rutas y endpoints de la API.</li>
+                <li><strong>Models:</strong> conté las classes que representen les entitats de la base de dades.</li>
+                <li><strong>Data:</strong> conté el context de la base de datos (Fm1Context).</li>
+                <li><strong>FM1.db:</strong> archiu SQLite amb les dades de Fórmula 1.</li>
+                <li><strong>Program.cs:</strong> configuració de l'arrencada de l'aplicació.</li>
+                <li><strong>appsettings.json:</strong> configuració de la conexió y paràmetres globals.</li>
+            </ul>
+            <img src="/EstructuraApi.png" alt="Estructura de carpetas del proyecto">
+        </section>
+
+        <section id="models">
+            <h2>3. Models</h2>
+            <p>La carpeta Modelos o Models en el projecte de C# s'encarrega de definir les estructures de dades principals de
+            l’aplicació. És a dir, aquí es defineix quina informació maneja l’ API i com es representa. En el nostre cas hem seguit
+            el mateix model que vam decidir al prinicipi de tot en l’entrega 1.
+            
+            En Modelos tenim les seguentes estructures:
+:</p>
+            <ul>
+                <li><strong>Circuits.cs:</strong> informació sobre los circuits.</li>
+                <li><strong>Drivers.cs:</strong> informació sobre los pilots.</li>
+                <li><strong>Constructors.cs:</strong> informació sobre los constructors.</li>
+            </ul>
+            <p>Es va cambiar el tipus de dades <code>int</code> a <code>string</code> en el camp <code>Code</code> de
+                <em>Drivers</em> per permitir valors com “HAM” o “VER”. Com que aquests codis no són valors numèrics, considerem utilitzar un tipus string millor i adequadament.</p>
+            <p>Circuits.cs</p>
+            <img src="/API_MODELS_CIRCUITS.png" alt="Ejemplo de modelo en C#">
+            <img src="/publicclasscircuit.png" alt="Classcircuit">
+            <p>Constructor.cs</p>
+            <img src="/Constructor.cs.png" alt="modelConstructor">
+            <img src="/Publicclassconstructor.png"  alt="ClassConstructor">
+            <p>Drivers.cs</p>
+            <img src="/Drivers.cs.png" alt="ModelDrivers">
+            <img src="/Publicclassdrivers.png" alt="ClassDrivers">
+        </section>
+
+        <section id="basedatos">
+            <h2>4. Base de dades FM1.db</h2>
+            <p>Per al nostre projecte de l’API de Fórmula 1, hem creat la base de dades FM1.db utilitzant DB Browser for SQLite de la
+            manera següent:
+            
+            
+            Teníem les dades de circuits, pilots i escuderies en fitxers CSV. Vam obrir DB Browser for SQLite, vam crear una nova
+            base de dades anomenada FM1.db i vam utilitzar l’opció de importar CSV a taula per a cada fitxer. Cada CSV es va
+            convertir en una taula dins de la base de dades:
+            -Circuits amb columnes: CircuitId, Name, Location, Country, Lat, Lng.
+            -Drivers amb columnes: DriverId, Number, Code, Forename, Surname, Dob, Nationality.
+            -Constructors amb columnes: ConstructorId, Name, Nationality.
+            
+            En importar els CSV, vam assignar tipus de dades adequats:
+            -int per a identificadors (CircuitId, DriverId, ConstructorId) i números de pilot (Number).
+            -string per a text (Name, Location, Country, Code, Forename, Surname, Nationality).
+            -double per a coordenades (Lat, Lng).
+            
+            
+            
+            
+            Després d’importar els CSV, vam comprovar que totes les taules i columnes s’havien creat correctament i que les dades
+            estiguessin completes i consistents.
+            Un cop creada la base de dades, la vam utilitzar al projecte F1Api, configurant la cadena de connexió cap a FM1.db. Això
+            ens permet realitzar operacions CRUD des de l’API utilitzant Entity Framework Core.
+.</p>
+            <ul>
+                <li>Circuits: CircuitId, Name, Location, Country, Lat, Lng</li>
+                <li>Drivers: DriverId, Number, Code, Forename, Surname, Dob, Nationality</li>
+                <li>Constructors: ConstructorId, Name, Nationality</li>
+            </ul>
+            <p>Taula Circuits</p>
+            <img src="/Ciruits.table.png" alt="TaulaCircuits">
+            <p>Taula Constructors</p>
+            <img src="/Constructors.table.png" alt="TulaConstructors">
+            <p>Taula Drivers</p>
+            <img src="/Drivers.table.png" alt="TaulaDrivers">
+        </section>
+
+        <section id="appsettings">
+            <h2>5. appsettings.json</h2>
+            <p>Define la cadena de conexión llamada <code>F1Connection</code> que apunta a <em>FM1.db</em>. También
+                incluye configuraciones de logging y CORS:</p>
+            <ul>
+                <li><strong>ConnectionStrings:</strong> Aquesta secció defineix les cadenes de connexió a la base de dades. En aquest cas, "F1Connection" és el nom de la
+                connexió i "Data Source=..." indica la ruta del fitxer de base de dades SQLite (FM1.db). Cada vegada que el teu codi
+                necessiti connectar-se a la base de dades, farà servir aquest nom per obtenir la cadena de connexió.</li>
+                <img src="/Connectionstrings.png" alt="ConnectionString">
+                <img src="f1connection.png" alt="f1connection">
+                <li><strong>Logging:</strong> Aquí es configura el registre de missatges. "Default": "Information" significa que es registren tots els missatges de
+                nivell informació o superior, mentre que "Microsoft.AspNetCore": "Warning" limita els missatges generats pel framework
+                ASP.NET Core només a advertències i errors. Això permet depurar sense omplir els logs amb missatges poc rellevants.</li>
+                <img src="/Logging.png" alt="Logging">
+                <li><strong>AllowedHosts:</strong> Defineix quins dominis poden accedir a l’API. El valor "*" permet l’accés des de qualsevol host, cosa útil en
+                desenvolupament; en producció normalment es restringeix a dominis específics per seguretat.</li>
+                <img src="/AllowedHost.png" alt="AllowedHost">
+            </ul>
+        </section>
+
+        <section id="programcs">
+            <h2>6. Program.cs</h2>
+            <img src="/Program.cs.png" alt="program.cs">
+            
+            <ul>
+                <li>using F1Api.Data: importa l’espai de noms on es troba la classe Fm1Context, que és el DbContext (és a dir, la connexió i
+                accés a la base de dades).
+                
+                
+                using Microsoft.EntityFrameworkCore: permet utilitzar Entity Framework Core, la llibreria d’ORM que facilita treballar
+                amb bases de dades en forma d’objectes.</li>
+                <img src="/EnntityFrameWork.png" alt="EntityFrameWork">
+
+                <li>Això crea un constructor (builder) per configurar serveis i la infraestructura de l’aplicació web.
+                És el primer pas per preparar la nostra API.</li>
+                <img src="WebApplication.png" alt="WebApplication">
+                <li>AddDbContext registra la classe Fm1Context com a servei dins de l’aplicació.
+                UseSqlite indica que la base de dades que farà servir és SQLite.
+                builder.Configuration.GetConnectionString("F1Connection") obté la cadena de connexió (normalment guardada a
+                appsettings.json) per saber on es troba la base de dades.</li>
+                <img src="/GetConnection.png" alt="GetConnection">
+                <li>AddControllers(): afegeix el suport per utilitzar controladors (les classes que contenen les rutes i endpoints de
+                l’API).
+                AddEndpointsApiExplorer(): permet explorar automàticament els endpoints de l’API (necessari per Swagger).
+                AddSwaggerGen(): activa Swagger, una eina que genera documentació interactiva de l’API.</li>
+                <img src="/BuilderServices.png" alt="BuilderBuild">
+
+
+            </ul>
+            <p>Aquí es construeix l’aplicació amb totes les configuracions fetes anteriorment</p>
+            <img src="/Builder.Build.png" alt="BuilderBuild">
+            <ul>
+                <li>
+                    Activa Swagger i Swagger UI, que permet provar els endpoints des del navegador.
+                    <img src="Swagger.png" alt=" swagger">                </li>
+                <li>Redirigeix tot el tràfic HTTP a HTTPS per més seguretat.</li>
+                <img src="HttpsRedirection.png" alt="HttpsRedirection">
+            </ul>
+
+        </section>
+
+        <section id="autenticacion">
+            <h2>7. Autenticación</h2>
+            <p>Para realizar operaciones sensibles (POST, PUT, DELETE) es necesario enviar una <strong>API_KEY</strong>.
+                En este caso, la clave utilizada fue “TU_API_KEY”. Los métodos GET permanecen públicos.</p>
+            <img src="/imagen4.png" alt="Ejemplo de autenticación API Key">
+            <img src="/Imagen1.png" alt="Ejemplo de autenticación API Key">
+            <img src="/imagen2.png" alt="Ejemplo de autenticación API Key">
+            <img src="/imagen3.png" alt="Ejemplo de autenticación API Key">
+        </section>
+
+        <section id="checklist">
+            <h2>8. Checklist de requisitos</h2>
+            <table border="1" cellpadding="5">
+                <tr>
+                    <th>Recurso</th>
+                    <th>GET</th>
+                    <th>POST</th>
+                    <th>PUT</th>
+                    <th>DELETE</th>
+                </tr>
+                <tr>
+                    <td>CIRCUITS</td>
+                    <td>Implementado*1</td>
+                    <td>Implementado</td>
+                    <td>Implementado*2</td>
+                    <td>Implementado</td>
+                </tr>
+                <tr>
+                    <td>CONSTRUCTORS</td>
+                    <td>Implementado*3</td>
+                    <td>Implementado</td>
+                    <td>Implementado</td>
+                    <td>Implementado</td>
+                </tr>
+                <tr>
+                    <td>DRIVERS</td>
+                    <td>Implementado</td>
+                    <td>Implementado</td>
+                    <td>Implementado</td>
+                    <td>Implementado</td>
+                </tr>
+            </table>
+            <p>*1 Error en la dirección de la base de datos.<br>*2 Error al igualar la id requerida con
+                circuits.Circuits.id.<br>*3 Error en el nombrado de la ruta Constructors.</p>
+            <img src="/imagen5.png" alt="Checklist de implementación">
+            <img src="/imagen6.png" alt="Checklist de implementación">
+        </section>
+
+        <section id="errores">
+            <h2>9. Errors detectats</h2>
+            <ul>
+                <li><strong>Ruta de la base de dades incorrecta.</strong></li>
+                <p>
+                    Aquest error ens va sortir perquè la ruta que havíem posat per accedir a la base de dades no era la
+                    correcta.
+                    Potser havíem mogut l’arxiu o el nom no coincidia.
+                    El que vam fer va ser comprovar on estava realment la base de dades i actualitzar la ruta a la configuració
+                    perquè apunti bé.
+                </p>
+                <img src="/imagen7.png" alt="Errors detectats i correccions">
+                <img src="/imagen8.png" alt="Errors detectats i correccions">
+                <li><strong>Error de mapatge d’IDs a Circuits.</strong></li>
+                <p>
+                    En aquest cas, el problema era que els identificadors (IDs) de la taula <em>Circuits</em> no estaven ben
+                    relacionats
+                    amb els d’altres taules. Alguns no coincidien o estaven duplicats.
+                    El que vam fer va ser revisar les relacions entre les taules i corregir els IDs perquè tot quedés ben
+                    enllaçat.
+                </p>
+                <img src="/imagen9.png" alt="Errors detectats i correccions">
+        
+                <li><strong>Nom de taula incorrecte a Constructors.</strong></li>
+                <p>
+                    Aquí l’error era perquè el nom de la taula que havíem posat al codi no coincidia amb el de la base de dades.
+                    Per exemple, al codi hi posava <em>Constructors</em> però a la base de dades estava com
+                    <em>Constructor</em>.
+                    Ho vam solucionar comprovant el nom exacte i posant-lo igual a tot arreu.
+                </p>
+                <img src="/imagen10.png" alt="Errors detectats i correccions">
+                
+            </ul>
+            
+        </section>
+
+
+    <section id="Allotjament">
+        <h2>10. Allotjament de l'API en C#</h2>
+        <p>Durant el desplegament a IIS es va detectar un error <strong>HTTP 500.19</strong> relacionat amb el mòdul
+            <em>AspNetCoreModuleV2</em>. Tot i tenir instal·lat el Hosting Bundle de .NET 8, l’IIS no detectava
+            els mòduls, cosa que impedia que l’API s’iniciés correctament.
+        </p>
+        <p>Solució recomanada: reinstal·lar o reparar el Hosting Bundle, i verificar els permisos i els mòduls actius.</p>
+        <img src="/imagen11.png" alt="Desplegament del projecte a IIS">
+    </section>
+
+
+    <section id="Testeo">
+        <h2>Test de l'API</h2>
+        <p>En aquest apartat posarem documentació sobre el que va ser el test general de l'API.</p>
+        <ul>
+            <li><strong>CIRCUITS / GET</strong></li>
+            <img src="/Testeo1.png" alt="Desplegament del projecte a IIS">
+            <img src="/Testeo2.png" alt="Desplegament del projecte a IIS">
+            <img src="/Testeo3.png" alt="Desplegament del projecte a IIS">
+            <img src="/Testeo4.png" alt="Desplegament del projecte a IIS">
+            <img src="/Testeo6.png" alt="Desplegament del projecte a IIS">
+    
+            <p>Quan provem la part de GET a Circuits i, per exemple, volem que ens mostri per ID, funciona correctament.<br>
+                Passa el mateix si filtrem per nom o per les altres propietats, per tant, vam obtenir un resultat amb èxit i
+                funcionalitat.</p>
+    
+            <li><strong>CIRCUITS / POST</strong></li>
+            <img src="/Testeo7.png" alt="Desplegament del projecte a IIS">
+            <img src="/Testeo8.png" alt="Desplegament del projecte a IIS">
+            <img src="/Testeo9.png" alt="Desplegament del projecte a IIS">
+            <p>En la nostra API el mètode POST funciona correctament, ja que hem afegit un nou circuit amb noves
+                característiques.<br>
+                En fer la comprovació amb el mètode GET filtrant per l’ID 81, ens mostra el nou circuit que hem afegit,
+                sobretot indicant
+                la API_KEY.
+            </p>
+    
+            <li><strong>CIRCUITS / PUT</strong></li>
+            <img src="/Testeo10.png" alt="Desplegament del projecte a IIS">
+            <img src="/Testeo11.png" alt="Desplegament del projecte a IIS">
+            <p>En aquest cas, amb el mètode PUT podem substituir característiques d’un circuit i afegir-ne de noves. Per
+                exemple,<br>
+                amb el circuit que hem creat abans li canviem el nom i n’afegim un altre de nou. En verificar-ho amb el
+                mètode GET,<br>
+                es mostra el circuit amb el nou nom.
+            </p>
+    
+            <li><strong>CIRCUITS / DELETE</strong></li>
+            <img src="/Testeo12.png" alt="Desplegament del projecte a IIS">
+            <img src="/Testeo13.png" alt="Desplegament del projecte a IIS">
+            <img src="/Testeo14.png" alt="Desplegament del projecte a IIS">
+            <img src="/Testeo15.png" alt="Desplegament del projecte a IIS">
+            <p>En el mètode DELETE, per comprovar si funciona, vam eliminar la nova pista creada per ID, en aquest cas amb
+                l’ID 81. En fer<br>
+                la comprovació amb GET, veiem que ja no existeix el circuit amb l’ID 81 que havíem creat. Per tant, funciona
+                correctament.
+            </p>
+    
+            <li><strong>CONSTRUCTORS / GET</strong></li>
+            <img src="/Testeo16.png" alt="Desplegament del projecte a IIS">
+            <img src="/Testeo17.png" alt="Desplegament del projecte a IIS">
+            <img src="/Testeo18.png" alt="Desplegament del projecte a IIS">
+            <p>
+                En el mètode GET a Constructors podem observar que ens mostra tots els constructors i també per filtratge.
+                En aquest cas,<br>
+                si demanem el constructor amb ID20 ens mostra el corresponent, i igual si busquem amb més filtres. Per tant,
+                funciona correctament.
+            </p>
+    
+            <li><strong>CONSTRUCTORS / POST</strong></li>
+            <img src="/Testeo19.png" alt="Desplegament del projecte a IIS">
+            <img src="/Testeo20.png" alt="Desplegament del projecte a IIS">
+            <p>
+                Per comprovar el mètode POST a Constructors, afegim un nou constructor amb l’ID212. Per veure si funciona,
+                ho comprovem<br>
+                amb el mètode GET filtrant per l’ID212, i en aquest cas ens mostra el nou constructor que hem creat.
+            </p>
+    
+            <li><strong>CONSTRUCTORS / PUT</strong></li>
+            <img src="/Testeo21.png" alt="Desplegament del projecte a IIS">
+            <img src="/Testeo22.png" alt="Desplegament del projecte a IIS">
+            <p>
+                Canviem el nom del constructor que havíem creat i li assignem el nou nom "NOM2". En verificar amb el mètode
+                GET,<br>
+                podem observar que s’ha substituït el nom antic pel nou, donant un resultat amb èxit.
+            </p>
+    
+            <li><strong>CONSTRUCTORS / DELETE</strong></li>
+            <img src="/Testeo23.png" alt="Desplegament del projecte a IIS">
+            <img src="/Testeo24.png" alt="Desplegament del projecte a IIS">
+            <p>
+                Eliminem el nou constructor per l’ID i ho comprovem amb el mètode GET. Podem observar que ja no existeix cap
+                constructor amb l’ID212.
+            </p>
+    
+            <li><strong>DRIVERS / GET</strong></li>
+            <img src="/Testeo25.png" alt="Desplegament del projecte a IIS">
+            <img src="/Testeo26.png" alt="Desplegament del projecte a IIS">
+            <img src="/Testeo27.png" alt="Desplegament del projecte a IIS">
+            <img src="/Testeo28.png" alt="Desplegament del projecte a IIS">
+            <img src="/Testeo29.png" alt="Desplegament del projecte a IIS">
+            <img src="/Testeo30.png" alt="Desplegament del projecte a IIS">
+            <img src="/Testeo31.png" alt="Desplegament del projecte a IIS">
+            <img src="/Testeo32.png" alt="Desplegament del projecte a IIS">
+    
+            <p>
+                Per comprovar el mètode GET a Drivers, el filtrem per diferents característiques (CODE, Forename, Surname,
+                dob).<br>
+                Podem observar que ens mostra els resultats demanats, per tant podem considerar el mètode GET com a exitós!
+            </p>
+    
+            <li><strong>DRIVERS / POST</strong></li>
+            <img src="/Testeo33.png" alt="Desplegament del projecte a IIS">
+            <img src="/Testeo34.png" alt="Desplegament del projecte a IIS">
+            <img src="/Testeo35.png" alt="Desplegament del projecte a IIS">
+            <p>
+                Creem un nou driver amb el mètode POST amb les característiques desitjades i comprovem si s’ha creat amb
+                èxit amb el mètode GET.<br>
+                Podem observar que en posar Driverid 845 ens mostra el nou driver creat.
+            </p>
+    
+            <li><strong>DRIVERS / PUT</strong></li>
+            <img src="/Testeo36.png" alt="Desplegament del projecte a IIS">
+            <img src="/Testeo37.png" alt="Desplegament del projecte a IIS">
+            <img src="/Testeo38.png" alt="Desplegament del projecte a IIS">
+            <p>
+                Modifiquem dades del driver nou que havíem creat i les guardem. Amb el mètode GET<br>
+                podem observar que s’han substituït i canviat els valors antics pels nous. Per tant, funciona correctament!
+            </p>
+    
+            <li><strong>DRIVERS / DELETE</strong></li>
+            <img src="/Testeo39.png" alt="Desplegament del projecte a IIS">
+            <img src="/Testeo40.png" alt="Desplegament del projecte a IIS">
+            <img src="/Testeo41.png" alt="Desplegament del projecte a IIS">
+            <p>
+                Eliminem el driver que havíem creat per ID i, en voler mostrar-lo amb GET, ja no existeix. Funcionalitat
+                exitosa.
+            </p>
+        </ul>
+    </section>
+    
+    <section id="Conclusió">
+        <h2>Conclusió</h2>
+        <p>Per acabar, podem dir que hem creat una API amb funcionalitats exitoses. Tot i això, hem hagut de treballar
+            detall per detall perquè funcioni correctament, corregint errors i modificant codi. Estem satisfets
+            amb el treball final que hem fet, i la veritat és que ha estat una bona manera de treballar amb C# i amb APIs.
+            Sobretot, el treball ha estat cooperatiu i comunicatiu.
+        <h4>Enllaç del Repositori del Projecte</h4>
+        <a href="https://github.com/MikeGC18/Proyecto-Aron-y-Mike">https://github.com/MikeGC18/Proyecto-Aron-y-Mike</a>
+        </p>
+    </section>
+    </main>
+    
+    <footer>
+        <p>Documentació basada en el projecte F1Api (lliurament MP12 PROY1 ENTREGA3).</p>
+    </footer>
+</body>
+</html>
